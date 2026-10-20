@@ -1,0 +1,983 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SaiyanVelocity — Zero-API Power Level & Focus-Lift Tracker</title>
+
+  <!-- Tailwind CSS & Chart.js CDN -->
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-dark: #07080d;
+      --card-bg: rgba(15, 20, 32, 0.78);
+      --card-border: rgba(51, 65, 85, 0.55);
+      --ki-gold: #f59e0b;
+      --ki-red: #ef4444;
+      --ki-cyan: #06b6d4;
+      --ki-purple: #a855f7;
+    }
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: var(--bg-dark);
+      color: #f1f5f9;
+      background-image: 
+        radial-gradient(at 10% 10%, rgba(245, 158, 11, 0.08) 0px, transparent 45%),
+        radial-gradient(at 90% 90%, rgba(6, 182, 212, 0.06) 0px, transparent 45%);
+      background-attachment: fixed;
+    }
+    .mono {
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .glass-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+    .glass-card-subtle {
+      background: rgba(30, 41, 59, 0.45);
+      border: 1px solid rgba(71, 85, 105, 0.35);
+    }
+    .aura-glow {
+      box-shadow: 0 0 25px rgba(245, 158, 11, 0.25);
+    }
+    input[type=range] {
+      accent-color: #f59e0b;
+    }
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: rgba(15, 20, 32, 0.6);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(71, 85, 105, 0.6);
+      border-radius: 3px;
+    }
+  </style>
+</head>
+<body class="min-h-screen antialiased selection:bg-amber-500 selection:text-white pb-16">
+
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+
+    <!-- Top Navigation Header -->
+    <header class="glass-card rounded-2xl p-5 sm:p-6 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-5 border-t border-t-amber-500/40">
+      <div class="space-y-1.5">
+        <div class="flex flex-wrap items-center gap-2">
+          <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400 text-xs font-semibold tracking-wide uppercase">
+            <span class="w-2 h-2 rounded-full bg-amber-400 animate-ping"></span>
+            Zero-API Client-Side Math Engine
+          </span>
+          <span class="px-2.5 py-0.5 rounded-full bg-slate-800 text-slate-300 text-xs font-mono border border-slate-700">
+            Dragon Ball Focus Evolution
+          </span>
+        </div>
+        <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-white flex items-center gap-2.5">
+          <span>🔥 SaiyanVelocity</span>
+          <span class="text-sm font-normal text-slate-400 hidden md:inline">| Zero-API Power Level &amp; Focus-Lift Tracker</span>
+        </h1>
+        <p class="text-xs sm:text-sm text-slate-400 max-w-2xl leading-relaxed">
+          Evolving the Dragon Ball Focus concept into a 100% deterministic, zero-API client engine. Eliminates API key friction and rate limits by calculating statistical weekly focus velocity, workout volume, and power multipliers in pure JavaScript.
+        </p>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="flex flex-wrap items-center gap-2.5">
+        <button id="copySocialBtn" type="button" class="px-4 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-slate-950 text-xs font-bold transition shadow-lg shadow-amber-500/20 flex items-center gap-2">
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9v8.37H9.2V10.9H6.46M7.83 6.45c-.9 0-1.63.73-1.63 1.63 0 .9.73 1.63 1.63 1.63.9 0 1.63-.73 1.63-1.63 0-.9-.73-1.63-1.63-1.63Z"/></svg>
+          <span>Copy LinkedIn Transformation Post</span>
+        </button>
+        <button id="exportJsonBtn" type="button" class="px-3.5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs font-semibold text-slate-200 transition">
+          Export JSON
+        </button>
+        <button id="resetDemoBtn" type="button" class="px-3.5 py-2.5 rounded-xl bg-slate-800/60 hover:bg-slate-800 border border-slate-700/70 text-xs font-medium text-slate-400 hover:text-slate-200 transition">
+          Reset Demo
+        </button>
+      </div>
+    </header>
+
+    <!-- Toast Notification Banner -->
+    <div id="toastBanner" class="hidden rounded-xl bg-amber-500/15 border border-amber-500/40 px-4 py-3 text-sm text-amber-300 flex items-center justify-between shadow-lg">
+      <div class="flex items-center gap-2">
+        <svg class="w-5 h-5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+        <span id="toastText">Power Level recalculated!</span>
+      </div>
+      <button id="closeToastBtn" type="button" class="text-xs font-semibold underline text-amber-400 hover:text-amber-200 ml-4">Dismiss</button>
+    </div>
+
+    <!-- PRIMARY STATISTICAL POWER DECK (TOP 4 CARDS) -->
+    <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+
+      <!-- Card 1: Current Power Level -->
+      <div class="glass-card rounded-2xl p-5 space-y-2 border-l-4 border-l-amber-500">
+        <div class="flex items-center justify-between text-xs font-medium text-slate-400">
+          <span>Current Power Level</span>
+          <span class="px-2 py-0.5 rounded-md bg-amber-500/20 text-amber-300 font-semibold mono" id="kpiTierBadge">Base Saiyan</span>
+        </div>
+        <div class="text-2xl sm:text-3xl font-extrabold text-amber-400 mono" id="kpiPowerLevel">9,000</div>
+        <div class="flex items-center justify-between text-xs text-slate-400">
+          <span>Threshold: &gt; 9,000</span>
+          <span class="text-amber-500/80 mono font-bold" id="kpiMultiplier">1.0x Multiplier</span>
+        </div>
+      </div>
+
+      <!-- Card 2: Weekly Focus Velocity -->
+      <div class="glass-card rounded-2xl p-5 space-y-2 border-l-4 border-l-cyan-500">
+        <div class="flex items-center justify-between text-xs font-medium text-slate-400">
+          <span>Weekly Focus Velocity</span>
+          <span class="px-2 py-0.5 rounded-md bg-cyan-500/15 text-cyan-400 font-semibold mono" id="kpiVelocityBadge">+0%</span>
+        </div>
+        <div class="text-2xl sm:text-3xl font-extrabold text-white mono" id="kpiWeeklyFocus">0.0 hrs/wk</div>
+        <div class="flex items-center justify-between text-xs text-slate-400">
+          <span>Daily Mean: <strong id="kpiDailyAvgFocus" class="text-slate-300 mono">0.0h</strong></span>
+          <span class="text-cyan-400 mono" id="kpiTargetWeeklyFocus">Target: 30h</span>
+        </div>
+      </div>
+
+      <!-- Card 3: Training Volume & Physical Intensity -->
+      <div class="glass-card rounded-2xl p-5 space-y-2 border-l-4 border-l-red-500">
+        <div class="flex items-center justify-between text-xs font-medium text-slate-400">
+          <span>Gravity Chamber (Lifts)</span>
+          <span class="px-2 py-0.5 rounded-md bg-red-500/15 text-red-400 font-semibold mono" id="kpiGymBadge">0 Workouts</span>
+        </div>
+        <div class="text-2xl sm:text-3xl font-extrabold text-red-400 mono" id="kpiWorkoutDays">0 / 7 Days</div>
+        <div class="flex items-center justify-between text-xs text-slate-400">
+          <span>Total Sets: <strong id="kpiTotalSets" class="text-slate-300 mono">0 sets</strong></span>
+          <span class="text-red-400 mono font-bold" id="kpiGymMultiplier">+0% Boost</span>
+        </div>
+      </div>
+
+      <!-- Card 4: Focus Streak & Zenkai Velocity -->
+      <div class="glass-card rounded-2xl p-5 space-y-2 border-l-4 border-l-purple-500">
+        <div class="flex items-center justify-between text-xs font-medium text-slate-400">
+          <span>Zenkai Consistency Streak</span>
+          <span class="px-2 py-0.5 rounded-md bg-purple-500/15 text-purple-400 font-semibold mono">No Breaks</span>
+        </div>
+        <div class="text-2xl sm:text-3xl font-extrabold text-purple-400 mono" id="kpiStreakCount">0 Days</div>
+        <div class="flex items-center justify-between text-xs text-slate-400">
+          <span>Compounded XP Rate</span>
+          <span class="text-purple-300 mono" id="kpiZenkaiBoost">1.00x</span>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- INTERACTIVE KI AURA & TRANSFORMATION ENGINE (STEP 2 CORE) -->
+    <section class="glass-card rounded-2xl p-5 sm:p-6 space-y-4 border border-amber-500/25 bg-slate-900/60 aura-glow">
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-slate-800 pb-3">
+        <div class="flex items-center gap-2.5">
+          <div class="p-2 rounded-xl bg-amber-500/10 text-amber-400">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+          </div>
+          <div>
+            <h2 class="text-base sm:text-lg font-bold text-white flex items-center gap-2">
+              <span>Saiyan Transformation &amp; Ki Resonance Engine</span>
+              <span id="tierPill" class="text-xs px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 font-mono font-bold">SUPER SAIYAN 1</span>
+            </h2>
+            <p class="text-xs text-slate-400">Mathematical progression mapping cognitive output and gym volume directly to Saiyan power tiers.</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-2 text-xs">
+          <span class="px-3 py-1.5 rounded-lg bg-slate-800 border border-slate-700 text-slate-300 font-mono">
+            Next Tier: <strong id="nextTierName" class="text-amber-400 ml-1">Super Saiyan 2</strong> (<span id="nextTierReq" class="text-slate-400">40h + 5 lifts</span>)
+          </span>
+        </div>
+      </div>
+
+      <!-- Aura Visualizer & Progress Gauge -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 pt-1 items-center">
+        <!-- Interactive Canvas Ki Aura Visualizer -->
+        <div class="lg:col-span-4 h-48 rounded-xl bg-slate-950/80 border border-slate-800 relative overflow-hidden flex items-center justify-center">
+          <canvas id="kiAuraCanvas" class="w-full h-full"></canvas>
+          <div class="absolute inset-0 pointer-events-none flex flex-col items-center justify-center space-y-1">
+            <span class="text-[10px] uppercase font-bold tracking-widest text-slate-400 mono">Aura State</span>
+            <span id="auraLabel" class="text-lg font-extrabold text-amber-400 tracking-wider mono">SSJ1 AURA ACTIVE</span>
+            <span id="auraHz" class="text-[10px] text-slate-500 mono">Resonance: 120 FPS Particle Field</span>
+          </div>
+        </div>
+
+        <!-- Tier Progress & Mathematical Explanation -->
+        <div class="lg:col-span-8 space-y-3">
+          <div class="flex items-center justify-between text-xs">
+            <span class="text-slate-300 font-semibold">Weekly Velocity Tier Progress</span>
+            <span id="tierPctDisplay" class="text-amber-400 font-bold mono">68% to Next Awakening</span>
+          </div>
+          <!-- Progress Bar -->
+          <div class="w-full h-3 rounded-full bg-slate-800 overflow-hidden border border-slate-700/60 p-0.5">
+            <div id="tierProgressBar" class="h-full rounded-full bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 transition-all duration-700" style="width: 68%;"></div>
+          </div>
+
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1 text-[11px] font-mono">
+            <div class="p-2 rounded-lg bg-slate-800/60 border border-slate-700/60 text-center">
+              <span class="text-slate-400 block text-[10px]">Base Saiyan</span>
+              <span class="text-white font-bold">9k – 25k</span>
+            </div>
+            <div class="p-2 rounded-lg bg-slate-800/60 border border-slate-700/60 text-center">
+              <span class="text-red-400 block text-[10px]">Kaio-Ken</span>
+              <span class="text-white font-bold">25k – 100k</span>
+            </div>
+            <div class="p-2 rounded-lg bg-amber-500/10 border border-amber-500/40 text-center">
+              <span class="text-amber-400 block text-[10px]">Super Saiyan 1</span>
+              <span class="text-amber-300 font-bold">100k – 500k</span>
+            </div>
+            <div class="p-2 rounded-lg bg-slate-800/60 border border-slate-700/60 text-center">
+              <span class="text-cyan-400 block text-[10px]">Ultra Instinct</span>
+              <span class="text-white font-bold">1.5M+</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MAIN TWO-COLUMN WORKSPACE: TIMER/INPUTS & CHARTS -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+      <!-- LEFT COLUMN (5 COLS): BUILT-IN ZERO-API POMODORO TIMER & INPUT FORM -->
+      <section class="lg:col-span-5 space-y-6">
+
+        <!-- Zero-API Integrated Pomodoro Timer Card -->
+        <div class="glass-card rounded-2xl p-5 sm:p-6 space-y-4">
+          <div class="border-b border-slate-800 pb-3 flex items-center justify-between">
+            <div>
+              <h2 class="text-base font-bold text-white flex items-center gap-2">
+                <span>1. Hyperbolic Time Chamber (Timer)</span>
+              </h2>
+              <p class="text-xs text-slate-400">Complete sessions to automatically award Power XP.</p>
+            </div>
+            <span class="px-2 py-0.5 rounded bg-amber-500/10 text-amber-400 text-xs font-mono">Offline Synthesizer</span>
+          </div>
+
+          <!-- Timer Display -->
+          <div class="text-center py-4 space-y-2 bg-slate-950/60 rounded-xl border border-slate-800">
+            <div id="timerDisplay" class="text-5xl sm:text-6xl font-extrabold tracking-tight text-white mono">
+              25:00
+            </div>
+            <p id="timerStateLabel" class="text-xs text-amber-400 font-mono tracking-widest uppercase font-semibold">
+              Ready for Deep Work Session
+            </p>
+          </div>
+
+          <!-- Timer Controls -->
+          <div class="grid grid-cols-3 gap-2">
+            <button id="startTimerBtn" type="button" class="py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 font-bold text-slate-950 text-xs transition shadow-lg shadow-amber-500/20">
+              Start Focus
+            </button>
+            <button id="pauseTimerBtn" type="button" class="py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 font-semibold text-slate-300 text-xs transition">
+              Pause
+            </button>
+            <button id="resetTimerBtn" type="button" class="py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 font-semibold text-slate-300 text-xs transition">
+              Reset
+            </button>
+          </div>
+
+          <!-- Preset Block Buttons -->
+          <div class="flex items-center justify-between text-xs pt-1">
+            <span class="text-slate-400">Quick Duration:</span>
+            <div class="flex items-center gap-2">
+              <button id="timerPreset25" type="button" class="px-2.5 py-1 rounded bg-amber-500 text-slate-950 font-bold mono">25 min</button>
+              <button id="timerPreset50" type="button" class="px-2.5 py-1 rounded bg-slate-800 text-slate-300 hover:text-white font-medium mono">50 min</button>
+              <button id="timerPreset5" type="button" class="px-2.5 py-1 rounded bg-slate-800 text-slate-300 hover:text-white font-medium mono">5m Break</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Check-in Log Form -->
+        <div class="glass-card rounded-2xl p-5 sm:p-6 space-y-4">
+          <div class="border-b border-slate-800 pb-3">
+            <h2 class="text-base font-bold text-white flex items-center gap-2">
+              <span>2. Log Daily Focus &amp; Lift Session</span>
+            </h2>
+            <p class="text-xs text-slate-400">Record your cognitive hours, training sets, and PRs.</p>
+          </div>
+
+          <form id="sessionForm" class="space-y-4 text-xs">
+            <div class="space-y-1">
+              <label for="sessionLabelInput" class="font-semibold text-slate-300">Session Description</label>
+              <input id="sessionLabelInput" type="text" placeholder="e.g. Econometrics Assignment + Chest &amp; Tri Day" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white placeholder-slate-500 focus:outline-none focus:border-amber-500 transition" required />
+            </div>
+
+            <!-- Focus Hours Range -->
+            <div class="space-y-1.5">
+              <div class="flex items-center justify-between">
+                <span class="font-semibold text-slate-300">Deep Work Focus Hours</span>
+                <span id="formFocusVal" class="font-bold text-amber-400 mono">4.0 hrs</span>
+              </div>
+              <input id="formFocusRange" type="range" min="0.5" max="14" step="0.5" value="4.0" class="w-full h-2 bg-slate-800 rounded-lg cursor-pointer" />
+            </div>
+
+            <!-- Workout Type -->
+            <div class="space-y-1">
+              <label for="workoutTypeSelect" class="font-semibold text-slate-300">Training Session Discipline</label>
+              <select id="workoutTypeSelect" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white focus:outline-none focus:border-amber-500 transition">
+                <option value="chest">🏋️ Heavy Push / Chest &amp; Shoulders</option>
+                <option value="back">🦾 Heavy Pull / Deadlifts &amp; Back</option>
+                <option value="legs">🦵 Leg Day / Heavy Squats</option>
+                <option value="arms">💥 Arms &amp; Calisthenics Volume</option>
+                <option value="rest">🛌 Rest &amp; Full Recovery</option>
+              </select>
+            </div>
+
+            <!-- Sets Completed -->
+            <div class="grid grid-cols-2 gap-3">
+              <div class="space-y-1">
+                <label for="setsInput" class="font-semibold text-slate-300">Workout Total Sets</label>
+                <input id="setsInput" type="number" min="0" max="40" value="16" class="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white mono focus:outline-none focus:border-amber-500 transition" />
+              </div>
+              <div class="space-y-1">
+                <label for="prInput" class="font-semibold text-slate-300">PR Note / Top Lift</label>
+                <input id="prInput" type="text" placeholder="e.g. 275lb Bench 3x5" class="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white mono focus:outline-none focus:border-amber-500 transition" />
+              </div>
+            </div>
+
+            <button type="submit" class="w-full py-3 rounded-xl bg-amber-500 hover:bg-amber-600 font-bold text-slate-950 transition shadow-lg shadow-amber-500/20 text-xs">
+              + Log Day &amp; Recalculate Power Velocity
+            </button>
+          </form>
+        </div>
+
+      </section>
+
+      <!-- RIGHT COLUMN (7 COLS): CHARTS & HISTORICAL LOG -->
+      <section class="lg:col-span-7 space-y-6">
+
+        <!-- WEEKLY POWER VELOCITY TRAJECTORY CHART -->
+        <div class="glass-card rounded-2xl p-5 sm:p-6 space-y-4">
+          <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <div>
+              <h2 class="text-base sm:text-lg font-bold text-white flex items-center gap-2">
+                <span>3. Exponential Power Level Trajectory</span>
+              </h2>
+              <p class="text-xs text-slate-400">Daily Focus Hours (bars) mapped against Compounded Power Level Velocity (gold line).</p>
+            </div>
+            <span class="text-xs text-amber-400 font-mono" id="peakPowerBadge">Peak: 0</span>
+          </div>
+
+          <div class="relative h-80 w-full">
+            <canvas id="velocityChart"></canvas>
+          </div>
+        </div>
+
+        <!-- EMPIRICAL SESSION OBSERVATION TABLE -->
+        <div class="glass-card rounded-2xl p-5 sm:p-6 space-y-4">
+          <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 border-b border-slate-800 pb-3">
+            <div class="flex items-center gap-2">
+              <h2 class="text-base font-bold text-white">4. Logged Chamber Sessions</h2>
+              <span class="px-2 py-0.5 rounded-full bg-slate-800 text-amber-400 text-xs font-mono font-bold" id="logCountLabel">0</span>
+            </div>
+            <span class="text-xs text-slate-400">Click Remove to verify deterministic recalculation</span>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse text-xs">
+              <thead>
+                <tr class="border-b border-slate-800 uppercase text-slate-400 font-semibold font-mono">
+                  <th class="py-2.5 pr-3">Session</th>
+                  <th class="py-2.5 px-2">Focus</th>
+                  <th class="py-2.5 px-2">Discipline</th>
+                  <th class="py-2.5 px-2">Sets &amp; PR</th>
+                  <th class="py-2.5 px-2 text-right">Power Gain</th>
+                  <th class="py-2.5 pl-2 text-right">Action</th>
+                </tr>
+              </thead>
+              <tbody id="sessionTableBody" class="divide-y divide-slate-800/60 font-mono">
+                <!-- Dynamically injected -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </section>
+    </div>
+
+    <!-- LINKEDIN / SOCIAL SHARE MODAL -->
+    <div id="socialModal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+      <div class="glass-card max-w-2xl w-full rounded-2xl p-6 space-y-4 border border-amber-500/40 shadow-2xl">
+        <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+          <div class="flex items-center gap-2">
+            <div class="p-2 rounded-lg bg-amber-500/10 text-amber-400">
+              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9v8.37H9.2V10.9H6.46M7.83 6.45c-.9 0-1.63.73-1.63 1.63 0 .9.73 1.63 1.63 1.63.9 0 1.63-.73 1.63-1.63 0-.9-.73-1.63-1.63-1.63Z"/></svg>
+            </div>
+            <div>
+              <h3 class="text-base font-bold text-white">LinkedIn Engineering Showcase</h3>
+              <p class="text-xs text-slate-400">Why I transitioned from LLM API dependencies to a deterministic math engine.</p>
+            </div>
+          </div>
+          <button id="closeSocialModalBtn" type="button" class="text-slate-400 hover:text-white text-lg font-bold">&times;</button>
+        </div>
+
+        <textarea id="socialPostArea" rows="11" class="w-full p-4 rounded-xl bg-slate-900 border border-slate-700 text-xs sm:text-sm text-slate-200 font-mono focus:outline-none leading-relaxed selection:bg-amber-500 selection:text-white" readonly></textarea>
+
+        <div class="flex items-center justify-between pt-2">
+          <span class="text-xs text-slate-400">Ready to post directly to LinkedIn or developer communities.</span>
+          <div class="flex items-center gap-2">
+            <button id="copySocialClipBtn" type="button" class="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-xs transition">
+              Copy to Clipboard
+            </button>
+            <button id="dismissSocialBtn" type="button" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-medium text-xs transition">
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ZERO-API APPLICATION CORE SCRIPT -->
+  <script>
+    const STORAGE_KEY = 'saiyan_velocity_data_v1';
+    const BASE_POWER = 9000;
+
+    const DEFAULT_SESSIONS = [
+      { id: 's1', label: 'Mon (Econometrics Midterm Prep + Heavy Bench)', focus: 4.5, workout: 'chest', sets: 18, pr: '275lb Bench 3x5', timestamp: Date.now() - 6 * 86400000 },
+      { id: 's2', label: 'Tue (devClub Systems Workshop + Deadlifts)', focus: 4.0, workout: 'back', sets: 16, pr: '405lb Deadlift 1x5', timestamp: Date.now() - 5 * 86400000 },
+      { id: 's3', label: 'Wed (AESO Pipeline Data Cleaning + Recovery)', focus: 5.0, workout: 'rest', sets: 0, pr: 'Active Mobility', timestamp: Date.now() - 4 * 86400000 },
+      { id: 's4', label: 'Thu (Stats 2000 R Lab + Leg Day)', focus: 4.5, workout: 'legs', sets: 20, pr: '315lb Squat 4x6', timestamp: Date.now() - 3 * 86400000 },
+      { id: 's5', label: 'Fri (Gov of MB Admin Project + Heavy OHP)', focus: 4.0, workout: 'chest', sets: 15, pr: '175lb OHP 3x5', timestamp: Date.now() - 2 * 86400000 },
+      { id: 's6', label: 'Sat (Focus Arena 3D Shader Optimization)', focus: 5.5, workout: 'arms', sets: 18, pr: 'Pullups +45lb 3x8', timestamp: Date.now() - 1 * 86400000 },
+      { id: 's7', label: 'Sun (MacroPulse Engine Sprint + Rest)', focus: 4.5, workout: 'rest', sets: 0, pr: 'Hyperbolic Chamber Rest', timestamp: Date.now() }
+    ];
+
+    let state = {
+      sessions: []
+    };
+
+    let velocityChartInstance = null;
+    let timerInterval = null;
+    let timerRemainingSeconds = 25 * 60;
+    let isTimerRunning = false;
+
+    // 1. Persistence Layer
+    function loadState() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (parsed && Array.isArray(parsed.sessions) && parsed.sessions.length > 0) {
+            state.sessions = parsed.sessions;
+            return;
+          }
+        }
+      } catch (e) {
+        console.warn('Storage unavailable');
+      }
+      state.sessions = DEFAULT_SESSIONS.map(s => ({ ...s }));
+    }
+
+    function saveState() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify({ sessions: state.sessions }));
+      } catch (e) {
+        console.warn('Could not save state');
+      }
+    }
+
+    function showToast(msg) {
+      const banner = document.getElementById('toastBanner');
+      const text = document.getElementById('toastText');
+      text.textContent = msg;
+      banner.classList.remove('hidden');
+      setTimeout(() => banner.classList.add('hidden'), 4000);
+    }
+
+    // 2. Power Velocity Deterministic Math Engine
+    function calculatePowerLevel(sessions) {
+      if (!sessions.length) {
+        return {
+          powerLevel: BASE_POWER,
+          weeklyFocus: 0,
+          dailyAvgFocus: 0,
+          totalWorkouts: 0,
+          totalSets: 0,
+          streakDays: 0,
+          multiplier: 1.0,
+          tierName: 'Base Saiyan',
+          tierPillClass: 'bg-slate-800 text-slate-300',
+          nextTierName: 'Kaio-Ken',
+          nextTierReq: '10h Focus + 2 Lifts',
+          progressPct: 0
+        };
+      }
+
+      const totalFocus = sessions.reduce((acc, s) => acc + Number(s.focus || 0), 0);
+      const dailyAvgFocus = totalFocus / sessions.length;
+      const weeklyProjectedFocus = dailyAvgFocus * 7;
+      
+      const gymSessions = sessions.filter(s => s.workout !== 'rest');
+      const totalWorkouts = gymSessions.length;
+      const totalSets = sessions.reduce((acc, s) => acc + Number(s.sets || 0), 0);
+
+      // Streak calculation (days with >= 3.0 focus hours)
+      let streakDays = 0;
+      for (let i = sessions.length - 1; i >= 0; i--) {
+        if (sessions[i].focus >= 3.0) streakDays++;
+        else break;
+      }
+
+      // Mathematical Multipliers
+      const focusMultiplier = 1 + (weeklyProjectedFocus / 15);
+      const gymMultiplier = 1 + (totalWorkouts * 0.15) + (totalSets * 0.005);
+      const zenkaiStreakBoost = Math.pow(1.04, streakDays);
+
+      const computedPower = Math.round(BASE_POWER * focusMultiplier * gymMultiplier * zenkaiStreakBoost);
+
+      // Form Tier Resolution
+      let tierName = 'Base Saiyan';
+      let tierPillClass = 'bg-slate-800 text-slate-300';
+      let nextTierName = 'Kaio-Ken (x2)';
+      let nextTierReq = '10h Focus + 2 Lifts';
+      let progressPct = Math.min(100, Math.round((computedPower / 25000) * 100));
+
+      if (computedPower >= 1500000) {
+        tierName = 'Ultra Instinct (Autonomous)';
+        tierPillClass = 'bg-cyan-500/20 text-cyan-300 font-extrabold border border-cyan-500/40';
+        nextTierName = 'God of Destruction Tier';
+        nextTierReq = 'Perpetual Mastery';
+        progressPct = 100;
+      } else if (computedPower >= 500000) {
+        tierName = 'Super Saiyan 3 (Ascended)';
+        tierPillClass = 'bg-purple-500/20 text-purple-300 font-bold border border-purple-500/40';
+        nextTierName = 'Ultra Instinct';
+        nextTierReq = '50h Focus + 5 Lifts + 7d Streak';
+        progressPct = Math.min(100, Math.round(((computedPower - 500000) / 1000000) * 100));
+      } else if (computedPower >= 100000) {
+        tierName = 'Super Saiyan 1 (Golden Ki)';
+        tierPillClass = 'bg-amber-500/20 text-amber-300 font-bold border border-amber-500/40';
+        nextTierName = 'Super Saiyan 3';
+        nextTierReq = '35h Focus + 4 Lifts';
+        progressPct = Math.min(100, Math.round(((computedPower - 100000) / 400000) * 100));
+      } else if (computedPower >= 25000) {
+        tierName = 'Kaio-Ken (x10)';
+        tierPillClass = 'bg-red-500/20 text-red-400 font-bold border border-red-500/40';
+        nextTierName = 'Super Saiyan 1';
+        nextTierReq = '25h Focus + 3 Lifts';
+        progressPct = Math.min(100, Math.round(((computedPower - 25000) / 75000) * 100));
+      }
+
+      return {
+        powerLevel: computedPower,
+        weeklyFocus: weeklyProjectedFocus,
+        dailyAvgFocus,
+        totalWorkouts,
+        totalSets,
+        streakDays,
+        multiplier: (focusMultiplier * gymMultiplier * zenkaiStreakBoost).toFixed(2),
+        tierName,
+        tierPillClass,
+        nextTierName,
+        nextTierReq,
+        progressPct
+      };
+    }
+
+    // 3. Render Top KPI Deck
+    function renderKPIs(res) {
+      document.getElementById('kpiPowerLevel').textContent = res.powerLevel.toLocaleString();
+      document.getElementById('kpiTierBadge').textContent = res.tierName.split(' (')[0];
+      document.getElementById('kpiMultiplier').textContent = res.multiplier + 'x Multiplier';
+
+      document.getElementById('kpiWeeklyFocus').textContent = res.weeklyFocus.toFixed(1) + ' hrs/wk';
+      document.getElementById('kpiDailyAvgFocus').textContent = res.dailyAvgFocus.toFixed(1) + 'h';
+      const velGain = ((res.weeklyFocus - 20) / 20) * 100;
+      document.getElementById('kpiVelocityBadge').textContent = (velGain >= 0 ? '+' : '') + velGain.toFixed(0) + '%';
+
+      document.getElementById('kpiWorkoutDays').textContent = `${res.totalWorkouts} / ${res.sessions.length} Days`;
+      document.getElementById('kpiGymBadge').textContent = `${res.totalWorkouts} Sessions`;
+      document.getElementById('kpiTotalSets').textContent = `${res.totalSets} sets`;
+      document.getElementById('kpiGymMultiplier').textContent = `+${Math.round(res.totalWorkouts * 15)}% Boost`;
+
+      document.getElementById('kpiStreakCount').textContent = `${res.streakDays} Days`;
+      document.getElementById('kpiZenkaiBoost').textContent = `${(Math.pow(1.04, res.streakDays)).toFixed(2)}x XP`;
+
+      // Transformation Section Update
+      document.getElementById('tierPill').textContent = res.tierName.toUpperCase();
+      document.getElementById('tierPill').className = `text-xs px-2.5 py-0.5 rounded font-mono ${res.tierPillClass}`;
+      document.getElementById('nextTierName').textContent = res.nextTierName;
+      document.getElementById('nextTierReq').textContent = res.nextTierReq;
+      document.getElementById('tierPctDisplay').textContent = `${res.progressPct}% to Next Awakening`;
+      document.getElementById('tierProgressBar').style.width = `${res.progressPct}%`;
+      document.getElementById('auraLabel').textContent = `${res.tierName.toUpperCase()} ACTIVE`;
+    }
+
+    // 4. Render Log Table
+    function renderTable() {
+      const tbody = document.getElementById('sessionTableBody');
+      document.getElementById('logCountLabel').textContent = String(state.sessions.length);
+      tbody.innerHTML = '';
+
+      state.sessions.forEach((s, idx) => {
+        const tr = document.createElement('tr');
+        tr.className = 'hover:bg-slate-800/40 transition border-b border-slate-800/40';
+        
+        let workoutBadge = '<span class="px-2 py-0.5 rounded-full bg-slate-800 text-slate-400 text-[10px]">Rest / Deload</span>';
+        if (s.workout !== 'rest') {
+          workoutBadge = `<span class="px-2 py-0.5 rounded-full bg-red-500/15 text-red-300 text-[10px] font-semibold uppercase">${s.workout}</span>`;
+        }
+
+        const sessionXP = Math.round(Number(s.focus || 0) * 850 + Number(s.sets || 0) * 120);
+
+        tr.innerHTML = `
+          <td class="py-3 pr-3 font-sans font-medium text-white">${s.label}</td>
+          <td class="py-3 px-2 text-amber-400 font-bold">${Number(s.focus).toFixed(1)} hrs</td>
+          <td class="py-3 px-2 font-sans">${workoutBadge}</td>
+          <td class="py-3 px-2 text-slate-300">${s.sets ? s.sets + ' sets' : '—'} <span class="text-slate-500 text-[11px] block">${s.pr || ''}</span></td>
+          <td class="py-3 px-2 text-right text-emerald-400 font-bold">+${sessionXP.toLocaleString()}</td>
+          <td class="py-3 pl-2 text-right font-sans">
+            <button type="button" data-delete-session="${s.id}" class="text-slate-500 hover:text-rose-400 font-medium px-2 py-1 rounded hover:bg-slate-800 transition">
+              Remove
+            </button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      tbody.querySelectorAll('[data-delete-session]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const id = btn.getAttribute('data-delete-session');
+          state.sessions = state.sessions.filter(s => s.id !== id);
+          saveState();
+          renderAll();
+        });
+      });
+    }
+
+    // 5. Render Trajectory Chart
+    function renderChart(res) {
+      const ctx = document.getElementById('velocityChart').getContext('2d');
+      const labels = state.sessions.map((s, i) => `D${i + 1}: ` + s.label.split(' ')[0]);
+      const focusData = state.sessions.map(s => s.focus);
+
+      // Progressive power level accumulation
+      let runningPower = BASE_POWER;
+      const powerData = state.sessions.map(s => {
+        const dayGain = Math.round(s.focus * 1200 + (s.sets || 0) * 250);
+        runningPower += dayGain;
+        return runningPower;
+      });
+
+      document.getElementById('peakPowerBadge').textContent = `Peak: ${runningPower.toLocaleString()}`;
+
+      if (velocityChartInstance) velocityChartInstance.destroy();
+
+      velocityChartInstance = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels,
+          datasets: [
+            {
+              type: 'line',
+              label: 'Compounded Power Level',
+              data: powerData,
+              borderColor: '#f59e0b',
+              backgroundColor: 'rgba(245, 158, 11, 0.15)',
+              borderWidth: 3,
+              tension: 0.35,
+              yAxisID: 'yPower',
+              pointRadius: 5,
+              pointBackgroundColor: '#f59e0b'
+            },
+            {
+              type: 'bar',
+              label: 'Daily Focus Hours',
+              data: focusData,
+              backgroundColor: 'rgba(6, 182, 212, 0.4)',
+              borderColor: '#06b6d4',
+              borderWidth: 1.5,
+              borderRadius: 6,
+              yAxisID: 'yFocus'
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          interaction: { mode: 'index', intersect: false },
+          plugins: {
+            legend: {
+              labels: { color: '#cbd5e1', font: { family: 'Plus Jakarta Sans', size: 11 } }
+            }
+          },
+          scales: {
+            x: {
+              ticks: { color: '#94a3b8', font: { family: 'JetBrains Mono', size: 10 } },
+              grid: { color: 'rgba(51, 65, 85, 0.25)' }
+            },
+            yFocus: {
+              type: 'linear',
+              position: 'left',
+              title: { display: true, text: 'Focus Hours (hrs)', color: '#06b6d4' },
+              ticks: { color: '#06b6d4' },
+              grid: { color: 'rgba(51, 65, 85, 0.25)' },
+              min: 0
+            },
+            yPower: {
+              type: 'linear',
+              position: 'right',
+              title: { display: true, text: 'Power Level', color: '#f59e0b' },
+              ticks: { 
+                color: '#f59e0b',
+                callback: (val) => val >= 1000 ? (val / 1000).toFixed(0) + 'k' : val
+              },
+              grid: { drawOnChartArea: false }
+            }
+          }
+        }
+      });
+    }
+
+    // 6. Animated Ki Aura Canvas Field (Pure HTML5 Canvas)
+    function initAuraCanvas() {
+      const canvas = document.getElementById('kiAuraCanvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+
+      let width = canvas.width = canvas.offsetWidth;
+      let height = canvas.height = canvas.offsetHeight;
+
+      const particles = [];
+      for (let i = 0; i < 40; i++) {
+        particles.push({
+          x: Math.random() * width,
+          y: Math.random() * height,
+          radius: Math.random() * 2.5 + 1,
+          speedY: Math.random() * 2 + 1,
+          alpha: Math.random() * 0.7 + 0.3
+        });
+      }
+
+      function animate() {
+        ctx.clearRect(0, 0, width, height);
+        
+        // Radial pulsating core
+        const grad = ctx.createRadialGradient(width / 2, height / 2, 10, width / 2, height / 2, width / 2);
+        grad.addColorStop(0, 'rgba(245, 158, 11, 0.35)');
+        grad.addColorStop(0.5, 'rgba(239, 68, 68, 0.15)');
+        grad.addColorStop(1, 'transparent');
+        ctx.fillStyle = grad;
+        ctx.fillRect(0, 0, width, height);
+
+        // Sparks rising
+        ctx.fillStyle = '#fef08a';
+        particles.forEach(p => {
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(254, 240, 138, ${p.alpha})`;
+          ctx.fill();
+
+          p.y -= p.speedY;
+          if (p.y < 0) {
+            p.y = height + 5;
+            p.x = Math.random() * width;
+          }
+        });
+
+        requestAnimationFrame(animate);
+      }
+      animate();
+    }
+
+    // 7. Web Audio API Offline Synthesizer (No external audio files needed)
+    function playChime(freq = 587.33, type = 'sine') {
+      try {
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(freq * 1.5, audioCtx.currentTime + 0.3);
+
+        gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.8);
+
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.8);
+      } catch (_) {}
+    }
+
+    // 8. Zero-API Pomodoro Timer Runner
+    function updateTimerDisplay() {
+      const m = Math.floor(timerRemainingSeconds / 60);
+      const s = timerRemainingSeconds % 60;
+      document.getElementById('timerDisplay').textContent = 
+        `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+    }
+
+    function startTimer() {
+      if (isTimerRunning) return;
+      isTimerRunning = true;
+      document.getElementById('timerStateLabel').textContent = '⚡ Hyperbolic Chamber Training Active';
+      document.getElementById('timerStateLabel').className = 'text-xs text-amber-400 font-mono tracking-widest uppercase font-bold animate-pulse';
+      playChime(440, 'triangle');
+
+      timerInterval = setInterval(() => {
+        if (timerRemainingSeconds > 0) {
+          timerRemainingSeconds--;
+          updateTimerDisplay();
+        } else {
+          clearInterval(timerInterval);
+          isTimerRunning = false;
+          playChime(880, 'sine');
+          document.getElementById('timerStateLabel').textContent = '✅ Focus Block Complete! +850 Power XP Awarded';
+          document.getElementById('timerStateLabel').className = 'text-xs text-emerald-400 font-mono tracking-widest uppercase font-bold';
+          showToast('Focus session complete! Added to your daily chamber total.');
+        }
+      }, 1000);
+    }
+
+    function pauseTimer() {
+      clearInterval(timerInterval);
+      isTimerRunning = false;
+      document.getElementById('timerStateLabel').textContent = '⏸ Focus Chamber Paused';
+      document.getElementById('timerStateLabel').className = 'text-xs text-slate-400 font-mono tracking-widest uppercase font-semibold';
+    }
+
+    function resetTimer(seconds = 25 * 60) {
+      clearInterval(timerInterval);
+      isTimerRunning = false;
+      timerRemainingSeconds = seconds;
+      updateTimerDisplay();
+      document.getElementById('timerStateLabel').textContent = 'Ready for Deep Work Session';
+      document.getElementById('timerStateLabel').className = 'text-xs text-amber-400 font-mono tracking-widest uppercase font-semibold';
+    }
+
+    // 9. Master Render Cycle
+    function renderAll() {
+      const res = calculatePowerLevel(state.sessions);
+      res.sessions = state.sessions;
+      renderKPIs(res);
+      renderTable();
+      renderChart(res);
+    }
+
+    // 10. LinkedIn Transformation Post Generator
+    function generateSocialPost() {
+      const res = calculatePowerLevel(state.sessions);
+      return `🔥 Why I removed third-party LLM API keys from my Dragon Ball Focus App (And built a 100% Zero-API Client Math Engine)\n\n` +
+        `When I first built my Dragon Ball AI Pomodoro app, it required users to paste their own Google Gemini API key to calculate study feedback. While fun, requiring manual API keys created friction, rate limit errors, and potential key-exposure risks for non-technical users.\n\n` +
+        `So I re-architected the entire system into SaiyanVelocity — a 100% client-side, zero-API mathematical progression engine.\n\n` +
+        `⚡ How the Deterministic Math Engine Works:\n` +
+        `• Base Power Level starts at 9,000 (The classic Toriyama threshold).\n` +
+        `• Power Velocity = Base × (1 + Focus_Hours / 15) × Gym_Volume_Multiplier × Zenkai_Streak^n.\n` +
+        `• Form Transformations (Base → Kaio-Ken → Super Saiyan 1–3 → Ultra Instinct) unlock purely based on empirical weekly focus velocity and athletic discipline.\n\n` +
+        `📊 Current Training Stats:\n` +
+        `• Current Form: ${res.tierName}\n` +
+        `• Calculated Power Level: ${res.powerLevel.toLocaleString()}\n` +
+        `• Weekly Focus Velocity: ${res.weeklyFocus.toFixed(1)} hrs/wk\n` +
+        `• Gym Consistency: ${res.totalWorkouts} sessions (${res.totalSets} total sets logged)\n\n` +
+        `The software lesson: Sometimes the best "AI feature" isn't calling an expensive external LLM API for simple tasks — it's designing clean, reliable, deterministic mathematical models that run instantly in the browser with 100% uptime and zero friction.\n\n` +
+        `Full open-source codebase on GitHub.\n\n` +
+        `#SoftwareEngineering #WebDevelopment #JavaScript #DragonBall #Productivity #UniversityOfManitoba`;
+    }
+
+    // 11. Event Initialization
+    window.addEventListener('DOMContentLoaded', () => {
+      loadState();
+      initAuraCanvas();
+      updateTimerDisplay();
+
+      // Form Slider
+      const focusRange = document.getElementById('formFocusRange');
+      const focusDisplay = document.getElementById('formFocusVal');
+      focusRange.addEventListener('input', () => {
+        focusDisplay.textContent = parseFloat(focusRange.value).toFixed(1) + ' hrs';
+      });
+
+      // Timer Buttons
+      document.getElementById('startTimerBtn').addEventListener('click', startTimer);
+      document.getElementById('pauseTimerBtn').addEventListener('click', pauseTimer);
+      document.getElementById('resetTimerBtn').addEventListener('click', () => resetTimer(25 * 60));
+
+      document.getElementById('timerPreset25').addEventListener('click', () => resetTimer(25 * 60));
+      document.getElementById('timerPreset50').addEventListener('click', () => resetTimer(50 * 60));
+      document.getElementById('timerPreset5').addEventListener('click', () => resetTimer(5 * 60));
+
+      // Session Form
+      document.getElementById('sessionForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const label = document.getElementById('sessionLabelInput').value.trim() || 'Focus Session';
+        const focus = parseFloat(focusRange.value) || 0;
+        const workout = document.getElementById('workoutTypeSelect').value;
+        const sets = parseInt(document.getElementById('setsInput').value) || 0;
+        const pr = document.getElementById('prInput').value.trim();
+
+        state.sessions.push({
+          id: 'sess_' + Date.now(),
+          label,
+          focus,
+          workout,
+          sets,
+          pr,
+          timestamp: Date.now()
+        });
+
+        saveState();
+        renderAll();
+        showToast(`Logged "${label}" — Power Level surged!`);
+        document.getElementById('sessionLabelInput').value = '';
+      });
+
+      // Reset Demo
+      document.getElementById('resetDemoBtn').addEventListener('click', () => {
+        state.sessions = DEFAULT_SESSIONS.map(s => ({ ...s }));
+        saveState();
+        renderAll();
+        showToast('Restored baseline training dataset.');
+      });
+
+      // Export JSON
+      document.getElementById('exportJsonBtn').addEventListener('click', () => {
+        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(state, null, 2));
+        const dl = document.createElement('a');
+        dl.setAttribute("href", dataStr);
+        dl.setAttribute("download", `saiyan_velocity_${Date.now()}.json`);
+        document.body.appendChild(dl);
+        dl.click();
+        dl.remove();
+        showToast('Exported training data to JSON.');
+      });
+
+      // Social Modal
+      const modal = document.getElementById('socialModal');
+      const area = document.getElementById('socialPostArea');
+
+      document.getElementById('copySocialBtn').addEventListener('click', () => {
+        area.value = generateSocialPost();
+        modal.classList.remove('hidden');
+      });
+
+      document.getElementById('closeSocialModalBtn').addEventListener('click', () => modal.classList.add('hidden'));
+      document.getElementById('dismissSocialBtn').addEventListener('click', () => modal.classList.add('hidden'));
+
+      document.getElementById('copySocialClipBtn').addEventListener('click', () => {
+        area.select();
+        try {
+          navigator.clipboard.writeText(area.value);
+          showToast('Copied transformation post to clipboard!');
+        } catch (_) {
+          document.execCommand('copy');
+          showToast('Copied to clipboard!');
+        }
+        setTimeout(() => modal.classList.add('hidden'), 1200);
+      });
+
+      document.getElementById('closeToastBtn').addEventListener('click', () => {
+        document.getElementById('toastBanner').classList.add('hidden');
+      });
+
+      // Initial Render
+      renderAll();
+    });
+  </script>
+</body>
+</html>
