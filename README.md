@@ -1,4 +1,4 @@
-# 🔥 SaiyanVelocity — Zero-API Power Level & Focus-Lift Tracker
+# 🔥 SaiyanVelocity — Zero-API Power Level & Focus-Lift Tracker!
 
 > **Deterministic Client-Side Dragon Ball Power Engine for Deep Work & Athletic Training**  
 > *Zero external API keys • Zero rate limits • 100% Client-Side LocalStorage Persistence*
